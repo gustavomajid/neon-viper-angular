@@ -49,8 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }));
 
   readonly headRotation = computed(
-    () =>
-      ({ right: 0, down: 90, left: 180, up: 270 })[this.game().direction] ?? 0,
+    () => ({ right: 0, down: 90, left: 180, up: 270 })[this.game().direction] ?? 0,
   );
 
   readonly stateLabel = computed(() => {
