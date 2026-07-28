@@ -28,8 +28,12 @@ storage and can be reset from the controls below the board.
 npm run format
 npm run lint
 npm run typecheck
+npm test
 npm run build
 ```
 
 The application uses Angular standalone components and Signals. The game engine
 and local-storage utilities remain framework-independent TypeScript modules.
+
+Tests run once by default for deterministic CI execution. Use `npm run test:watch`
+while developing locally.

@@ -6,8 +6,8 @@
 - [x] Implement the core Snake game loop.
 - [x] Add keyboard and touch controls.
 - [x] Persist the best score locally.
-- [ ] Add automated unit tests for the game engine.
-- [ ] Add continuous integration for formatting, linting, type checking, tests, and builds.
+- [x] Add automated unit tests for the game engine.
+- [x] Add continuous integration for formatting, linting, type checking, tests, and builds.
 
 ## Phase 2 — Product quality
 
