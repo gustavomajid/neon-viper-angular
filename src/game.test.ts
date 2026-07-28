@@ -122,6 +122,15 @@ describe("food and speed", () => {
 });
 
 describe("restart behavior", () => {
+  it.each(["idle", "countdown", "paused", "gameover"] as const)(
+    "does not advance while the game is %s",
+    (status) => {
+      const state = playingState({ status });
+
+      expect(stepGame(state)).toEqual({ state, ateFood: false });
+    },
+  );
+
   it("creates a fresh initial state", () => {
     const restarted = createInitialState(() => 0);
     expect(restarted.score).toBe(0);

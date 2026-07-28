@@ -40,5 +40,8 @@ jobs:
       - name: Type-check
         run: npm run typecheck
 
+      - name: Test
+        run: npm test
+
       - name: Build production bundle
         run: npm run build
