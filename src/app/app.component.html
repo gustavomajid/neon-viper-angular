@@ -1,0 +1,164 @@
+<main class="app-shell">
+  <div class="ambient ambient--one"></div>
+  <div class="ambient ambient--two"></div>
+
+  <header class="masthead">
+    <a class="brand" href="/" aria-label="Neon Viper home">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>NEON VIPER</span>
+    </a>
+    <div class="status-pill">
+      <span class="status-dot" [class]="'status-dot status-dot--' + game().status"></span>
+      {{ stateLabel() }}
+    </div>
+  </header>
+
+  <section class="game-layout" aria-labelledby="game-title">
+    <aside class="hero-copy">
+      <p class="eyebrow">ARCADE PROTOCOL / 01</p>
+      <h1 id="game-title">Chase the <em>signal.</em></h1>
+      <p class="lede">
+        Thread the grid. Feed the viper. Every signal makes the system faster.
+      </p>
+      <div class="desktop-help">
+        <span>MOVE</span>
+        <div class="key-row">
+          <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+          <small>or arrow keys</small>
+        </div>
+        <span>PAUSE</span>
+        <div class="key-row"><kbd>SPACE</kbd></div>
+      </div>
+    </aside>
+
+    <div class="game-column">
+      <div class="score-row">
+        <div class="score-card">
+          <span>Score</span>
+          <strong aria-live="polite">{{ scoreText(game().score) }}</strong>
+        </div>
+        <div class="score-card" [class.score-card--best]="isNewBest()">
+          <span>Best</span>
+          <strong>{{ scoreText(bestScore()) }}</strong>
+        </div>
+      </div>
+
+      <div class="board-frame">
+        <div class="frame-corner frame-corner--tl"></div>
+        <div class="frame-corner frame-corner--tr"></div>
+        <div class="frame-corner frame-corner--bl"></div>
+        <div class="frame-corner frame-corner--br"></div>
+
+        <div
+          class="game-board"
+          role="img"
+          [attr.aria-label]="
+            'Snake game board. Score ' + game().score + '. ' + stateLabel() + '.'
+          "
+          [style.--head-rotation]="headRotation() + 'deg'"
+          (touchstart)="handleTouchStart($event)"
+          (touchend)="handleTouchEnd($event)"
+        >
+          @for (cell of cells; track $index) {
+            <div [class]="cellClass(cell)" aria-hidden="true"></div>
+          }
+
+          @if (game().status !== "playing") {
+            <div class="game-overlay">
+              @if (game().status === "idle") {
+                <p class="overlay-kicker">SYSTEM READY</p>
+                <h2>Enter the grid</h2>
+                <p>Collect signals. Avoid the walls. Beat your best.</p>
+                <button class="primary-button" type="button" (click)="startGame()">
+                  Start run <span aria-hidden="true">↗</span>
+                </button>
+              }
+
+              @if (game().status === "countdown") {
+                <p class="overlay-kicker">LINKING...</p>
+                <strong class="countdown">{{ countdown() }}</strong>
+              }
+
+              @if (game().status === "paused") {
+                <p class="overlay-kicker">SIGNAL HELD</p>
+                <h2>Paused</h2>
+                <button class="primary-button" type="button" (click)="togglePause()">
+                  Resume run
+                </button>
+              }
+
+              @if (game().status === "gameover") {
+                <p class="overlay-kicker">
+                  {{ isNewBest() ? "NEW PERSONAL BEST" : "CONNECTION LOST" }}
+                </p>
+                <h2>{{ isNewBest() ? "Signal mastered" : "Run ended" }}</h2>
+                <div class="final-score">
+                  <span>FINAL SCORE</span>
+                  <strong>{{ scoreText(game().score) }}</strong>
+                </div>
+                <button class="primary-button" type="button" (click)="startGame()">
+                  Run it back <span aria-hidden="true">↻</span>
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button
+          class="secondary-button"
+          type="button"
+          [disabled]="game().status !== 'playing' && game().status !== 'paused'"
+          (click)="togglePause()"
+        >
+          {{ game().status === "paused" ? "Resume" : "Pause" }}
+        </button>
+        <button class="secondary-button" type="button" (click)="startGame()">
+          Restart
+        </button>
+
+        @if (!confirmReset()) {
+          <button
+            class="text-button"
+            type="button"
+            [disabled]="bestScore() === 0"
+            (click)="confirmReset.set(true)"
+          >
+            Reset best
+          </button>
+        } @else {
+          <div class="reset-confirm" role="group" aria-label="Confirm best score reset">
+            <span>Reset?</span>
+            <button type="button" (click)="resetBestScore()">Yes</button>
+            <button type="button" (click)="confirmReset.set(false)">No</button>
+          </div>
+        }
+      </div>
+
+      <div class="direction-pad" aria-label="Touch controls">
+        @for (
+          control of [
+            { direction: "up", label: "Move up", icon: "↑" },
+            { direction: "left", label: "Move left", icon: "←" },
+            { direction: "down", label: "Move down", icon: "↓" },
+            { direction: "right", label: "Move right", icon: "→" },
+          ];
+          track control.direction
+        ) {
+          <button
+            [class]="'direction-button direction-button--' + control.direction"
+            type="button"
+            [attr.aria-label]="control.label"
+            [disabled]="game().status !== 'playing'"
+            (pointerdown)="$event.preventDefault(); changeDirection($any(control.direction))"
+          >
+            <span aria-hidden="true">{{ control.icon }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <footer><span>V.1.0.0</span><span>BUILT FOR THE GRID</span></footer>
+</main>
