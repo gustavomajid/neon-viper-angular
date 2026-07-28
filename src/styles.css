@@ -1452,8 +1452,7 @@ footer::before {
     border: 1px solid rgba(202, 255, 61, 0.18);
     background:
       linear-gradient(rgba(202, 255, 61, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(202, 255, 61, 0.035) 1px, transparent 1px),
-      #0a0e18;
+      linear-gradient(90deg, rgba(202, 255, 61, 0.035) 1px, transparent 1px), #0a0e18;
     background-size: 5% 5%;
   }
 

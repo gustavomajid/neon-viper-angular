@@ -8,7 +8,10 @@
       <span>NEON VIPER</span>
     </a>
     <div class="status-pill">
-      <span class="status-dot" [class]="'status-dot status-dot--' + game().status"></span>
+      <span
+        class="status-dot"
+        [class]="'status-dot status-dot--' + game().status"
+      ></span>
       {{ stateLabel() }}
     </div>
   </header>
@@ -151,7 +154,9 @@
             type="button"
             [attr.aria-label]="control.label"
             [disabled]="game().status !== 'playing'"
-            (pointerdown)="$event.preventDefault(); changeDirection($any(control.direction))"
+            (pointerdown)="
+              $event.preventDefault(); changeDirection($any(control.direction))
+            "
           >
             <span aria-hidden="true">{{ control.icon }}</span>
           </button>
